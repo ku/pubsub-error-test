@@ -5,6 +5,8 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strconv"
+	"time"
 )
 
 const projectId = "arbitd-182901"
@@ -22,21 +24,22 @@ func main() {
 	// トピックへの参照を作成
 	t := client.Topic(topicId)
 
-	if len(os.Args) < 2  {
+	if len(os.Args) < 2 {
 		fmt.Println("missing argument")
 		os.Exit(2)
 	}
 
-	n := os.Args[1]
+	lim, _ := strconv.Atoi(os.Args[1])
 
-	// メッセージを発行
-	result := t.Publish(ctx, &pubsub.Message{
-		Data: []byte(fmt.Sprintf("%s", n)),
-	})
-	// メッセージIDとPublish呼び出しのエラーを発行
-	id, err := result.Get(ctx)
-	if err != nil {
-		fmt.Println(err)
+	for i := 0; i <= lim; i++ {
+		println(i)
+		time.Sleep(1000 * time.Millisecond)
+		result := t.Publish(ctx, &pubsub.Message{
+			Data: []byte(fmt.Sprintf("%d,%d", i, time.Now().Unix())),
+		})
+		_, err := result.Get(ctx)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
-	fmt.Printf("Published a message; msg ID: %v\n", id)
 }

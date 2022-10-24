@@ -1,0 +1,9 @@
+#!/bin/sh
+# in log explorer
+# resource.type="cloud_function" resource.labels.function_name="push_error" resource.labels.region="asia-northeast1"
+# NOT textPayload:"Function"
+# receiveTimestamp>"2022-10-24T05:38:00.649721412Z"
+# receiveTimestamp<"2022-10-24T05:53:00.649721412Z"
+#
+# download as csv and extract data
+cut -d ',' -f 12,13,14 | sed 's/"//g'

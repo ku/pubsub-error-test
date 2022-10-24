@@ -1,12 +1,13 @@
 package main
 
 import (
-	"cloud.google.com/go/pubsub"
 	"context"
 	"fmt"
 	"os"
 	"strconv"
 	"time"
+
+	"cloud.google.com/go/pubsub"
 )
 
 const projectId = "arbitd-182901"
@@ -31,9 +32,10 @@ func main() {
 
 	lim, _ := strconv.Atoi(os.Args[1])
 
+	// publish messages at 1rps
 	for i := 0; i <= lim; i++ {
 		println(i)
-		time.Sleep(1000 * time.Millisecond)
+		time.Sleep(100 * time.Millisecond)
 		result := t.Publish(ctx, &pubsub.Message{
 			Data: []byte(fmt.Sprintf("%d,%d", i, time.Now().Unix())),
 		})
